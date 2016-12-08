@@ -13,7 +13,7 @@ import HIPWebApp
 
 /// Web app with a configurable URL and AtDocumentStart user script that remembers what messages it has received
 class TestableWebApp: WebApp, WebAppMessageHandling, WebAppConfiguring, WebAppWebViewReferencing {
-    var onMessageReceived: (((String, Any)) -> Void)?
+    var onMessageReceived: (((String, Any?)) -> Void)?
 
     let appIdentifier = "testable-web-app"
     let initialURL: URL
@@ -32,7 +32,7 @@ class TestableWebApp: WebApp, WebAppMessageHandling, WebAppConfiguring, WebAppWe
 
     var supportedMessageNames: [String] { return ["API_READY"] }
 
-    func handleMessage(_ name: String, _ body: Any) -> Bool {
+    func handleMessage(_ name: String, _ body: Any?) -> Bool {
         onMessageReceived?((name, body))
         return true
     }
@@ -55,7 +55,7 @@ class TestableWebApp: WebApp, WebAppMessageHandling, WebAppConfiguring, WebAppWe
 class HIPBareBonesWebAppViewController: WebAppViewController {
     fileprivate var _createWebApp: (() -> WebApp)! = nil
 
-    convenience init(createWebApp: (() -> WebApp)) {
+    convenience init(createWebApp: @escaping (() -> WebApp)) {
         self.init()
         _createWebApp = createWebApp
     }
